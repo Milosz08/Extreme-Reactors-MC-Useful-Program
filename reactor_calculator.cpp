@@ -104,20 +104,9 @@ void getData(Data &var, BlocksQuantity& quantity) {
     int cMess = 2, oMess = 3, qMess1 = 4, qMess2 = 5, qMess3 = 6, qMess4 = 7, qMess5 = 8, eMess1 = 9, eMess2 = 10, eMess3 = 11;
     cmdMess(cMess);
     cin >> var.x >> var.y >> var.z;
-    string x = to_string(var.x);
-    string y = to_string(var.y);
-    string z = to_string(var.z);
-    char alphS[] = "abcdefghijklmnoprstuvwyz";
-    char alphB[] = "ABCDEFGHIJKLMNOPRSTUVWYZ";
-    if (x == alphS || y == alphS || z == alphS) {
-        if (x == alphB || y == alphB || z == alphB) {
-            cmdMess(eMess3);
-            exit(0);
-            if (var.x < 3 || var.y < 3 || var.z < 3) {
-                cmdMess(eMess2);
-                exit(0);
-            }
-        }
+    if (var.x < 3 || var.y < 3 || var.z < 3) {
+        cmdMess(eMess2);
+        exit(0);
     }
     cmdMess(oMess);
     cin >> var.chooseType;
@@ -140,6 +129,36 @@ void getData(Data &var, BlocksQuantity& quantity) {
 }
 
 /**
+ * @brief Wyświetlanie końcowego wyniku poszczególnych bloków
+ * @param toChange - zmienna ilościowa bloku
+ * @param choose - d instrukcji swith case
+*/
+void showEndingCount(int toChange, int choose) {
+    int stackCount = toChange / 64;
+    int restOfDivide = toChange % 64;
+    int buckToMilibuck = toChange * 1000;
+    switch (choose) {
+        case 1:
+            if (toChange <= 64) {
+                cout << " (~ " << stackCount << " stacks)" << endl;
+            }
+            else {
+                cout << " (~ " << stackCount << " stacks and " << restOfDivide << " pieces)" << endl;
+            }
+            break;
+        case 2:
+            cout << " (~ " << stackCount << " stacks and ";
+            if (toChange <= 64) {
+                 cout << buckToMilibuck << " milibuckets)" << endl;
+            }
+            else {
+                cout << restOfDivide << " pieces and " << buckToMilibuck << " milibuckets)" << endl;
+            }
+            break;
+    }
+}
+
+/**
  * @brief Funcje poszczególnych bloków reaktora, wyświetlające obliczoną końcową ilość produktów,
  * w tym zaokrągloną do całości liczbę stacków (64 sztuk). Niektóre funkcje nie wyświetlają się, jeśli
  * wartość zmiennej nadrzędnej wynosi 0.
@@ -151,15 +170,17 @@ void reactorControllerBlockInfo(Data& var, BlocksQuantity& quantity) {
 
 void reactorCasingBlockInfo(Data& var, BlocksQuantity& quantity) {
     cout << "  " << quantity.reactorCasingBlock << "x   Reactor Casing,";
-    quantity.reactorCasingBlock = quantity.reactorCasingBlock / 64;
-    cout << " (~ " << quantity.reactorCasingBlock << " stacks)" << endl;
+    int toChange = quantity.reactorCasingBlock;
+    int choose = 1;
+    showEndingCount(toChange, choose);
 }
 
 void reactorGlassBlockInfo(Data& var, BlocksQuantity& quantity) {
     if (quantity.reactorGlassBlock != 0) {
         cout << "  " << quantity.reactorGlassBlock << "x   Reactor Glass,";
-        quantity.reactorGlassBlock = quantity.reactorGlassBlock / 64;
-        cout << " (~ " << quantity.reactorGlassBlock << " stacks)" << endl;
+        int toChange = quantity.reactorGlassBlock;
+        int choose = 1;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
@@ -168,21 +189,24 @@ void reactorGlassBlockInfo(Data& var, BlocksQuantity& quantity) {
 
 void reactorControlRodBlockInfo(Data& var, BlocksQuantity& quantity) {
     cout << "  " << quantity.reactorControlRod << "x   Reactor Control Rod,";
-    quantity.reactorControlRod = quantity.reactorControlRod / 64;
-    cout << " (~ " << quantity.reactorControlRod << " stacks)" << endl;
+    int toChange = quantity.reactorControlRod;
+    int choose = 1;
+    showEndingCount(toChange, choose);
 }
 
 void yelloriumFuelRodInfo(Data& var, BlocksQuantity& quantity) {
     cout << "  " << quantity.yelloriumFuelRod << "x    Yellorium Fuel Rod,";
-    quantity.yelloriumFuelRod = quantity.yelloriumFuelRod / 64;
-    cout << " (~ " << quantity.yelloriumFuelRod << " stacks)" << endl;
+    int toChange = quantity.yelloriumFuelRod;
+    int choose = 1;
+    showEndingCount(toChange, choose);
 }
 
 void reactorCoolantBlockInfo(Data& var, BlocksQuantity& quantity) {
     if (quantity.reactorCoolantBlock != 0) {
         cout << "  " << quantity.reactorCoolantBlock << "x    Coolant Metal Block,";
-        quantity.reactorCoolantBlock = quantity.reactorCoolantBlock / 64;
-        cout << " (~ " << quantity.reactorCoolantBlock << " stacks)" << endl;
+        int toChange = quantity.reactorCoolantBlock;
+        int choose = 1;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
@@ -192,8 +216,9 @@ void reactorCoolantBlockInfo(Data& var, BlocksQuantity& quantity) {
 void bucketsOfLiquidInfo(Data& var, BlocksQuantity& quantity) {
     if (quantity.bucketsOfLiquid != 0) {
         cout << "  " << quantity.bucketsOfLiquid << "b    Coolant Liquid (buckets),";
-        quantity.bucketsOfLiquid = quantity.bucketsOfLiquid / 64;
-        cout << " (~ " << quantity.bucketsOfLiquid << " stacks)" << endl;
+        int toChange = quantity.bucketsOfLiquid;
+        int choose = 2;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
@@ -203,8 +228,9 @@ void bucketsOfLiquidInfo(Data& var, BlocksQuantity& quantity) {
 void reactorAccessPortBlockInfo(Data& var, BlocksQuantity& quantity) {
     if (quantity.reactorAccessPortBlock != 0) {
         cout << "  " << quantity.reactorAccessPortBlock << "x   Reactor Access Port,";
-        quantity.reactorAccessPortBlock = quantity.reactorAccessPortBlock / 64;
-        cout << " (~ " << quantity.reactorAccessPortBlock << " stacks)" << endl;
+        int toChange = quantity.reactorAccessPortBlock;
+        int choose = 1;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
@@ -213,15 +239,17 @@ void reactorAccessPortBlockInfo(Data& var, BlocksQuantity& quantity) {
 
 void reactorPowerTapBlock(Data& var, BlocksQuantity& quantity) {
     cout << "  " << quantity.reactorPowerTapBlock << "x   Reactor Power Tap,";
-    quantity.reactorPowerTapBlock = quantity.reactorPowerTapBlock / 64;
-    cout << " (~ " << quantity.reactorPowerTapBlock << " stacks)" << endl;
+    int toChange = quantity.reactorPowerTapBlock;
+    int choose = 1;
+    showEndingCount(toChange, choose);
 }
 
 void reactorCoolantPortBlockInfo(Data& var, BlocksQuantity& quantity) {
     if (quantity.reactorCoolantPortBlock != 0) {
         cout << "  " << quantity.reactorCoolantPortBlock << "x   Reactor Coolant Port,";
-        quantity.reactorCoolantPortBlock = quantity.reactorCoolantPortBlock / 64;
-        cout << " (~ " << quantity.reactorCoolantPortBlock << " stacks)" << endl;
+        int toChange = quantity.reactorCoolantPortBlock;
+        int choose = 1;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
@@ -231,8 +259,9 @@ void reactorCoolantPortBlockInfo(Data& var, BlocksQuantity& quantity) {
 void reactorComputerPortBlock(Data& var, BlocksQuantity& quantity) {
     if (quantity.reactorComputerPortBlock != 0) {
         cout << "  " << quantity.reactorComputerPortBlock << "x   Reactor ComputerCraft Port,";
-        quantity.reactorComputerPortBlock = quantity.reactorComputerPortBlock / 64;
-        cout << " (~ " << quantity.reactorComputerPortBlock << " stacks)" << endl;
+        int toChange = quantity.reactorComputerPortBlock;
+        int choose = 1;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
@@ -242,8 +271,9 @@ void reactorComputerPortBlock(Data& var, BlocksQuantity& quantity) {
 void reactorRednetPortBlock(Data& var, BlocksQuantity& quantity) {
     if (quantity.reactorRednetPortBlock != 0) {
         cout << "  " << quantity.reactorRednetPortBlock << "x   Reactor RedNet Port,";
-        quantity.reactorRednetPortBlock = quantity.reactorRednetPortBlock / 64;
-        cout << " (~ " << quantity.reactorRednetPortBlock << " stacks)" << endl;
+        int toChange = quantity.reactorRednetPortBlock;
+        int choose = 1;
+        showEndingCount(toChange, choose);
     }
     else {
         cout;
