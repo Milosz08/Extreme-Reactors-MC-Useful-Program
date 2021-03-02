@@ -90,15 +90,12 @@ void cmdMess(int choseMess) {
     case 10:
         cerr << "Error! The minimum size of the reactor is 3x3x3 (length x width x height)." << endl;
         break;
-    case 11:
-        cerr << "Error! The value entered must be a number." << endl;
-        break;
     }
 }
 
 /**
  * @brief Pobranie danych wpisanych z konsoli przez użytkownika + walidacja wprowadzonych danych
- * pod kątem zakresu liczbowego i tego, czy została wprowadzona liczba, czy litera.
+ * pod kątem zakresu liczbowego.
 */
 void getData(Data &var, BlocksQuantity& quantity) {
     int cMess = 2, oMess = 3, qMess1 = 4, qMess2 = 5, qMess3 = 6, qMess4 = 7, qMess5 = 8, eMess1 = 9, eMess2 = 10, eMess3 = 11;
@@ -131,7 +128,7 @@ void getData(Data &var, BlocksQuantity& quantity) {
 /**
  * @brief Wyświetlanie końcowego wyniku poszczególnych bloków
  * @param toChange - zmienna ilościowa bloku
- * @param choose - d instrukcji swith case
+ * @param choose - do instrukcji swith case
 */
 void showEndingCount(int toChange, int choose) {
     int stackCount = toChange / 64;
@@ -159,25 +156,68 @@ void showEndingCount(int toChange, int choose) {
 }
 
 /**
+ * @brief Funkcja drukująca na ekran dane, w celu większej czytelności wyniku.
+*/
+void showPreInfoCmd(int choose, BlocksQuantity& quantity) {
+    switch (choose) {
+    case 1: //reactor casing quantity
+        cout << "  " << quantity.reactorCasingBlock << "x   Reactor Casing,";
+        break;
+    case 2: //reactor glass quantity
+        cout << "  " << quantity.reactorGlassBlock << "x   Reactor Glass,";
+        break;
+    case 3: //reactor control rod
+        cout << "  " << quantity.reactorControlRod << "x   Reactor Control Rod,";
+        break;
+    case 4: //yellorium fuel rod
+        cout << "  " << quantity.yelloriumFuelRod << "x    Yellorium Fuel Rod,";
+        break;
+    case 5: //coolant metal block
+        cout << "  " << quantity.reactorCoolantBlock << "x    Coolant Metal Block,";
+        break;
+    case 6: //coolant liquid
+        cout << "  " << quantity.bucketsOfLiquid << "b    Coolant Liquid (buckets),";
+        break;
+    case 7: //reactor access port
+        cout << "  " << quantity.reactorAccessPortBlock << "x   Reactor Access Port,";
+        break;
+    case 8: //reactor power tap
+        cout << "  " << quantity.reactorPowerTapBlock << "x   Reactor Power Tap,";
+        break;
+    case 9: //reactor coolant port
+        cout << "  " << quantity.reactorCoolantPortBlock << "x   Reactor Coolant Port,";
+        break;
+    case 10: //reactor computercraft port
+        cout << "  " << quantity.reactorComputerPortBlock << "x   Reactor ComputerCraft Port,";
+        break;
+    case 11: //reactor rednet port
+        cout << "  " << quantity.reactorRednetPortBlock << "x   Reactor RedNet Port,";
+        break;
+    }
+}
+
+/**
  * @brief Funcje poszczególnych bloków reaktora, wyświetlające obliczoną końcową ilość produktów,
  * w tym zaokrągloną do całości liczbę stacków (64 sztuk). Niektóre funkcje nie wyświetlają się, jeśli
  * wartość zmiennej nadrzędnej wynosi 0.
 */
-void reactorControllerBlockInfo(Data& var, BlocksQuantity& quantity) {
+void reactorControllerBlockInfo() {
     cout << "  1x   Reactor Controller,";
     cout << " (~ 0 stacks)" << endl;
 }
 
-void reactorCasingBlockInfo(Data& var, BlocksQuantity& quantity) {
-    cout << "  " << quantity.reactorCasingBlock << "x   Reactor Casing,";
+void reactorCasingBlockInfo(BlocksQuantity& quantity) {
+    int chooseInfo = 1;
+    showPreInfoCmd(chooseInfo, quantity);
     int toChange = quantity.reactorCasingBlock;
     int choose = 1;
     showEndingCount(toChange, choose);
 }
 
-void reactorGlassBlockInfo(Data& var, BlocksQuantity& quantity) {
+void reactorGlassBlockInfo(BlocksQuantity& quantity) {
     if (quantity.reactorGlassBlock != 0) {
-        cout << "  " << quantity.reactorGlassBlock << "x   Reactor Glass,";
+        int chooseInfo = 2;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.reactorGlassBlock;
         int choose = 1;
         showEndingCount(toChange, choose);
@@ -187,23 +227,26 @@ void reactorGlassBlockInfo(Data& var, BlocksQuantity& quantity) {
     }
 }
 
-void reactorControlRodBlockInfo(Data& var, BlocksQuantity& quantity) {
-    cout << "  " << quantity.reactorControlRod << "x   Reactor Control Rod,";
+void reactorControlRodBlockInfo(BlocksQuantity& quantity) {
+    int chooseInfo = 3;
+    showPreInfoCmd(chooseInfo, quantity);
     int toChange = quantity.reactorControlRod;
     int choose = 1;
     showEndingCount(toChange, choose);
 }
 
-void yelloriumFuelRodInfo(Data& var, BlocksQuantity& quantity) {
-    cout << "  " << quantity.yelloriumFuelRod << "x    Yellorium Fuel Rod,";
+void yelloriumFuelRodInfo(BlocksQuantity& quantity) {
+    int chooseInfo = 4;
+    showPreInfoCmd(chooseInfo, quantity);
     int toChange = quantity.yelloriumFuelRod;
     int choose = 1;
     showEndingCount(toChange, choose);
 }
 
-void reactorCoolantBlockInfo(Data& var, BlocksQuantity& quantity) {
+void reactorCoolantBlockInfo(BlocksQuantity& quantity) {
     if (quantity.reactorCoolantBlock != 0) {
-        cout << "  " << quantity.reactorCoolantBlock << "x    Coolant Metal Block,";
+        int chooseInfo = 5;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.reactorCoolantBlock;
         int choose = 1;
         showEndingCount(toChange, choose);
@@ -213,9 +256,10 @@ void reactorCoolantBlockInfo(Data& var, BlocksQuantity& quantity) {
     }
 }
 
-void bucketsOfLiquidInfo(Data& var, BlocksQuantity& quantity) {
+void bucketsOfLiquidInfo(BlocksQuantity& quantity) {
     if (quantity.bucketsOfLiquid != 0) {
-        cout << "  " << quantity.bucketsOfLiquid << "b    Coolant Liquid (buckets),";
+        int chooseInfo = 6;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.bucketsOfLiquid;
         int choose = 2;
         showEndingCount(toChange, choose);
@@ -225,9 +269,10 @@ void bucketsOfLiquidInfo(Data& var, BlocksQuantity& quantity) {
     }
 }
 
-void reactorAccessPortBlockInfo(Data& var, BlocksQuantity& quantity) {
+void reactorAccessPortBlockInfo(BlocksQuantity& quantity) {
     if (quantity.reactorAccessPortBlock != 0) {
-        cout << "  " << quantity.reactorAccessPortBlock << "x   Reactor Access Port,";
+        int chooseInfo = 7;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.reactorAccessPortBlock;
         int choose = 1;
         showEndingCount(toChange, choose);
@@ -237,16 +282,18 @@ void reactorAccessPortBlockInfo(Data& var, BlocksQuantity& quantity) {
     }
 }
 
-void reactorPowerTapBlock(Data& var, BlocksQuantity& quantity) {
-    cout << "  " << quantity.reactorPowerTapBlock << "x   Reactor Power Tap,";
+void reactorPowerTapBlock(BlocksQuantity& quantity) {
+    int chooseInfo = 8;
+    showPreInfoCmd(chooseInfo, quantity);
     int toChange = quantity.reactorPowerTapBlock;
     int choose = 1;
     showEndingCount(toChange, choose);
 }
 
-void reactorCoolantPortBlockInfo(Data& var, BlocksQuantity& quantity) {
+void reactorCoolantPortBlockInfo(BlocksQuantity& quantity) {
     if (quantity.reactorCoolantPortBlock != 0) {
-        cout << "  " << quantity.reactorCoolantPortBlock << "x   Reactor Coolant Port,";
+        int chooseInfo = 9;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.reactorCoolantPortBlock;
         int choose = 1;
         showEndingCount(toChange, choose);
@@ -256,9 +303,10 @@ void reactorCoolantPortBlockInfo(Data& var, BlocksQuantity& quantity) {
     }
 }
 
-void reactorComputerPortBlock(Data& var, BlocksQuantity& quantity) {
+void reactorComputerPortBlock(BlocksQuantity& quantity) {
     if (quantity.reactorComputerPortBlock != 0) {
-        cout << "  " << quantity.reactorComputerPortBlock << "x   Reactor ComputerCraft Port,";
+        int chooseInfo = 10;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.reactorComputerPortBlock;
         int choose = 1;
         showEndingCount(toChange, choose);
@@ -268,9 +316,10 @@ void reactorComputerPortBlock(Data& var, BlocksQuantity& quantity) {
     }
 }
 
-void reactorRednetPortBlock(Data& var, BlocksQuantity& quantity) {
+void reactorRednetPortBlock(BlocksQuantity& quantity) {
     if (quantity.reactorRednetPortBlock != 0) {
-        cout << "  " << quantity.reactorRednetPortBlock << "x   Reactor RedNet Port,";
+        int chooseInfo = 11;
+        showPreInfoCmd(chooseInfo, quantity);
         int toChange = quantity.reactorRednetPortBlock;
         int choose = 1;
         showEndingCount(toChange, choose);
@@ -286,18 +335,18 @@ void reactorRednetPortBlock(Data& var, BlocksQuantity& quantity) {
 void informGlobalData(Data& var, BlocksQuantity& quantity) {
     cout << endl;
     cout << "For " << var.chooseType << " type of reactor, you will need:" << endl;
-    reactorControllerBlockInfo(var, quantity);
-    reactorCasingBlockInfo(var, quantity);
-    reactorGlassBlockInfo(var, quantity);
-    reactorControlRodBlockInfo(var, quantity);
-    yelloriumFuelRodInfo(var, quantity);
-    reactorCoolantBlockInfo(var, quantity);
-    bucketsOfLiquidInfo(var, quantity);
-    reactorAccessPortBlockInfo(var, quantity);
-    reactorPowerTapBlock(var, quantity);
-    reactorCoolantPortBlockInfo(var, quantity);
-    reactorComputerPortBlock(var, quantity);
-    reactorRednetPortBlock(var, quantity);
+    reactorControllerBlockInfo();
+    reactorCasingBlockInfo(quantity);
+    reactorGlassBlockInfo(quantity);
+    reactorControlRodBlockInfo(quantity);
+    yelloriumFuelRodInfo(quantity);
+    reactorCoolantBlockInfo(quantity);
+    bucketsOfLiquidInfo(quantity);
+    reactorAccessPortBlockInfo(quantity);
+    reactorPowerTapBlock(quantity);
+    reactorCoolantPortBlockInfo(quantity);
+    reactorComputerPortBlock(quantity);
+    reactorRednetPortBlock(quantity);
 }
 
 /**
